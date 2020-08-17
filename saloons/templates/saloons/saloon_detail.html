@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load jalali_tags %}
+{% load thumbnail %}
+{% block head %}
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
+
+{% endblock %}
+
+{% block title %}
+{{ saloon.name }}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+	<h4 class="text-center mt-5">تصاویری از محیط {% if saloon.type == 'su' %}چمن  {% else %} سالن {% endif %}</h4>
+	<div class="col-10 mx-auto mt-5">
+		<div id="demo" class="carousel slide" data-ride="carousel">
+
+	  <!-- Indicators -->
+	  <ul class="carousel-indicators">
+	    {% for image in images %}
+	        <li data-target="#demo" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %} active {% endif %}"></li>
+	    {% endfor %}
+
+	  </ul>
+
+	  <!-- The slideshow -->
+	  <div class="carousel-inner">
+	    {% for image in images %}
+	        <div class="carousel-item {% if forloop.first %} active {% endif %}">
+	        <img src="{% thumbnail image.picture 800x400 crop %}" class="img-thumbnail" alt="{{ saloon.name }}">
+	        </div>
+	    {% endfor %}
+
+	  </div>
+
+	  <!-- Left and right controls -->
+	  <a class="carousel-control-prev" href="#demo" data-slide="prev">
+	    <span class="carousel-control-prev-icon"></span>
+	  </a>
+	  <a class="carousel-control-next" href="#demo" data-slide="next">
+	    <span class="carousel-control-next-icon"></span>
+	  </a>
+
+	</div>
+	</div>
+	<div class="col-10 mx-auto">
+		<div class="card mt-4">
+			<div class="card-header">
+				<div class="row">
+					<div class="col-md-10">
+						<h4 class="text-center">{{ saloon.name }}</h4>
+					</div>
+					<div class="col-md-2">
+						<button  data-toggle="modal" data-target="#owner" class="btn btn-sm btn-outline-info text-center">
+											{{ saloon.owner.first_name }}
+											{{ saloon.owner.last_name }}
+										</button>
+										<div class="modal fade" id="owner" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+										  <div class="modal-dialog modal-dialog-centered" role="document">
+										    <div class="modal-content">
+										      <div class="modal-header">
+										        <h5 class="modal-title" id="exampleModalLongTitle">درباره {{ saloon.owner.first_name }}
+											{{ saloon.owner.last_name }}</h5>
+
+										      </div>
+										      <div class="modal-body">
+												<ul>
+													<img style="width: 50%; height: 50%;" class="img-thumbnail" src="{% thumbnail saloon.owner.user_profile.avatar 250x200 crop %}" alt="">
+													<li>شماره تماس: {{ saloon.owner.phone }}</li>
+													<li> پست الکترونیکی: {{ saloon.owner.email }}</li>
+												</ul>
+										      </div>
+										      <div class="modal-footer">
+										        <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+										      </div>
+										    </div>
+										  </div>
+									</div>
+									</div>
+				</div>
+			</div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-4 mt-2">
+						ساعت کار {% if saloon.type == 'su' %}
+						چمن
+						{% else %}
+						سالن
+						{% endif %}  از
+						{{ saloon.start_time }}
+						تا
+						{{ saloon.end_time }}
+						می‌باشد.
+					</div>
+					<div class="col-md-4">
+						استان:
+						<a href="{% url 'saloons:saloons_province' saloon.province %}" class="btn btn-outline-primary">{{ saloon.province }}</a>
+					</div>
+					<div class="col-md-4">
+						شهر:
+						<a href="{% url 'saloons:saloons_city' saloon.city %}" class="btn btn-outline-danger">{{ saloon.city }}</a>
+					</div>
+				</div>
+				<hr>
+			<div class="row">
+				<div class="col-md-4">
+					<img class="img-thumbnail" src="{% thumbnail saloon.picture 250x200 crop %}" alt="{{ saloon.name }}" />
+				</div>
+				<div class="col-md-8">
+					<div>
+						{{ saloon.about|safe }}
+					</div>
+					<hr>
+					<div class="text-center">
+						<h5>امکانات </h5>
+					</div>
+					<div>
+						<div class="row">
+							{% for foo in saloon.features.all %}
+								<div class="col-3">
+									<li>{{ foo }}</li>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+					<hr>
+				<div class="row mx-auto">
+					<h5 class="text-center mx-auto">روی نقشه</h5>
+					<div class="col-12 img-thumbnail mx-auto" style="padding: 100px; " id="map"></div>
+					<script>
+						// TO MAKE THE MAP APPEAR YOU MUST
+						// ADD YOUR ACCESS TOKEN FROM
+						// https://account.mapbox.com
+					mapboxgl.accessToken = 'pk.eyJ1IjoibGluaW9sb24iLCJhIjoiY2pzYWtrNTQzMDE1NTQ5bzZnN2hyMThyaiJ9.CUVl1SVPGqheh8sx0TQ61g';
+					var map = new mapboxgl.Map({
+					container: 'map',
+					style: 'mapbox://styles/mapbox/streets-v11',
+					center: [{{ saloon.on_map }}],
+					zoom: 8
+					});
+
+					var marker = new mapboxgl.Marker()
+					.setLngLat([{{ saloon.on_map }}])
+					.addTo(map);
+					</script>
+				</div>
+				</div>
+			</div>
+			</div>
+			<div class="card-footer">
+
+				<!-- Button trigger modal -->
+				<button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#exampleModalCenter">
+					انتخاب سالن و رزرو
+				</button>
+
+				<!-- Modal -->
+				<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+				  <div class="modal-dialog modal-dialog-centered" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="exampleModalLongTitle">انتخاب تاریخ و زمان</h5>
+
+				      </div>
+				      <div class="modal-body">
+				        <form action="" method="post">
+							{% csrf_token %}
+							<div class="col-8 mx-auto">
+								{{ form.as_p }}
+								<input type="submit" class="btn btn-primary btn-block" value="چک کردن و ثبت رزرو">
+							</div>
+						</form>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+
+			</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

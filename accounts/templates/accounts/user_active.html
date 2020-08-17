@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+فعال‌سازی
+{% endblock %}
+
+{% block content %}
+
+	<div class="card mt-5">
+	<div class="card-header">
+		<h3>فعال‌سازی</h3>
+	</div>
+	<div class="card-body">
+		<div class="col-8 mx-auto">
+			<p class="alert alert-success">لینک فعال‌سازی برای شما ارسال شد. پوشه Index و یا Spam خود را چک کنید.</p>
+		</div>
+	</div>
+	<div class="card-footer">
+		<ul>
+			<li><a href="{% url 'accounts:user_login' %}">ورود به حساب کاربری</a></li>
+			<li><a href="{% url 'accounts:resend_code' %}">ارسال مجدد لینک فعال‌سازی </a></li>
+			<li><a href="{% url 'accounts:user_forget' %}">فراموشی رمز عبور</a></li>
+		</ul>
+	</div>
+	</div>
+
+{% endblock %}

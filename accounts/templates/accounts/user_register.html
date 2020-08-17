@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+ساخت حساب کاربری
+{% endblock %}
+
+{% block content %}
+
+	<div class="card mt-5">
+	<div class="card-header">
+		<h3>ساخت حساب کاربری</h3>
+	</div>
+	<div class="card-body">
+		<div class="col-8 mx-auto">
+			<form action="" method="post">
+			{% csrf_token %}
+			{{ form.username|as_crispy_field }}
+			{{ form.email|as_crispy_field }}
+			{{ form.password|as_crispy_field }}
+			<input type="submit" class="btn btn-primary btn-block" value="ساختن حساب کاربری">
+		</form>
+			<hr>
+			<div class="row">
+				<h4>ثبت نام سریع</h4>
+				<a class="btn btn-outline-danger btn-block" href="{% url "social:begin" "google-oauth2" %}">ثبت نام با حساب گوگل</a>
+			</div>
+		</div>
+	</div>
+	<div class="card-footer">
+		<ul>
+			<li><a href="{% url 'accounts:user_login' %}">ورود به حساب کاربری</a></li>
+		</ul>
+	</div>
+	</div>
+
+{% endblock %}

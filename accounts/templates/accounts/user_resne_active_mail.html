@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+ارسال مجدد لینک فعال‌سازی
+{% endblock %}
+
+{% block content %}
+
+	<div class="card mt-5">
+	<div class="card-header">
+		<h3>ارسال مجدد لینک فعال‌سازی</h3>
+	</div>
+	<div class="card-body">
+		<div class="col-8 mx-auto">
+			<form action="" method="post">
+			{% csrf_token %}
+			{{ form.email|as_crispy_field }}
+			<input type="submit" class="btn btn-primary btn-block" value="ارسال لینک فعال‌سازی">
+		</form>
+		</div>
+	</div>
+	<div class="card-footer">
+		<ul>
+			<li><a href="{% url 'accounts:user_login' %}">ورود به حساب کاربری</a></li>
+		</ul>
+	</div>
+	</div>
+
+{% endblock %}

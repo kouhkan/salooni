@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+تماس با ما
+{% endblock %}
+
+{% block content %}
+
+	<div class="card mt-5  mx-auto">
+	<div class="card-header text-center">
+		<h3>فرم تماس با ما</h3>
+	</div>
+	<div class="card-body">
+		<div class="col-8 mx-auto">
+			<form action="" method="post">
+			{% csrf_token %}
+			<div class="row mx-auto">
+				<div class="col-6">
+				{{ form.first_name|as_crispy_field }}
+			</div>
+			<div class="col-6">
+				{{ form.last_name|as_crispy_field }}
+			</div>
+			</div>
+				<div class="row mx-auto">
+					<div class="col-6">
+					{{ form.email|as_crispy_field }}
+				</div>
+				<div class="col-6">
+					{{ form.subject|as_crispy_field }}
+				</div>
+				</div>
+				<div class="col-12 mx-auto">
+					{{ form.body|as_crispy_field }}
+				</div>
+			<input type="submit" class="btn btn-primary btn-block" value="ارسال">
+		</form>
+		</div>
+	</div>
+
+	</div>
+
+{% endblock %}

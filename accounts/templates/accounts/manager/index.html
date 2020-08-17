@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+
+	مدیریت :::‌ {{ request.user }}
+{% endblock %}
+
+{% block content %}
+
+	<div class="row">
+		<div class="col-12 mt-5 mx-auto">
+
+		<h4 class="text-center">تاریخچه‌ی رزروها</h4>
+		<table class="table table-responsive-lg table-responsive table-hover">
+			<thead>
+			<tr>
+				<td>#</td>
+				<td>کد رزرو</td>
+				<td>کاربر</td>
+				<td>نام سالن</td>
+				<td>تاریخ رزرو</td>
+				<td>ساعت رزرو</td>
+				<td>هزینه پرداخت شده</td>
+				<td>کد پرداخت</td>
+				<td>تاریخ پرداخت</td>
+				<td>وضعیت پرداخت</td>
+			</tr>
+			</thead>
+			<tbody>
+			{% for res in reserves %}
+			<tr>
+			<td>{{ forloop.counter }}</td>
+			<td>{{ res.id }}</td>
+			<td>
+				<button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#exampleModalCenter{{res.user.username}}">
+				{{ res.user.username }}
+				</button>
+					<!-- Modal -->
+				<div class="modal fade" id="exampleModalCenter{{res.user.username}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+				  <div class="modal-dialog modal-dialog-centered" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="exampleModalLongTitle">اطلاعات کاربر</h5>
+
+				      </div>
+				      <div class="modal-body">
+				        <ul>
+					        <li>نام و نام خانوادگی: {{ res.user.first_name }} {{ res.user.last_name }}</li>
+					        <li>ایمیل: {{ res.user.email }}</li>
+					        <li>شماره تماس: {{ res.user.phone }}</li>
+				        </ul>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+			</td>
+			<!-- Button trigger modal -->
+
+
+
+			<td>{{ res.saloon.name }}</td>
+			<td>{{ res.change_datetime }}</td>
+			<td>{{ res.hour }}</td>
+			<td>{{ res.saloon.amount|add:1000 }} تومان</td>
+			{% for pay in res.reserve_payments.all %}
+				{% if pay.paid is None %}
+				<td><span class="btn btn-danger">پرداخت نشده</span></td>
+				<td><span class="btn btn-danger">پرداخت نشده</span></td>
+				<td><span class="btn btn-danger">پرداخت نشده</span></td>
+				{% else %}
+				<td>{{ pay.id }}</td>
+				<td>{{ pay.change_datetime }}</td>
+				<td>
+					{% if pay.paid == True %}
+					<span class="btn btn-outline-success">پرداخت شده</span>
+					{% else %}
+					<span class="btn btn-danger">پرداخت نشده</span>
+					{% endif %}
+				</td>
+				{% endif %}
+
+			{% endfor %}
+
+
+			</tr>
+			{% endfor %}
+
+			</tbody>
+		</table>
+			</div>
+
+		</div>
+
+{% endblock %}
+

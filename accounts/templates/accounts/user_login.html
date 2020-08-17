@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+ورود به حساب کاربری
+{% endblock %}
+
+{% block content %}
+
+	<div class="card mt-5">
+	<div class="card-header">
+		<h3>ورود به حساب کاربری</h3>
+	</div>
+	<div class="card-body">
+		<div class="col-8 mx-auto">
+			<form action="" method="post">
+			{% csrf_token %}
+			{{ form.username|as_crispy_field }}
+			{{ form.password|as_crispy_field }}
+			<input type="submit" class="btn btn-primary btn-block" value="ورود به حساب کاربری">
+		</form>
+			<hr>
+			<div class="row">
+				<h4>ورود سریع</h4>
+				<a class="btn btn-outline-danger btn-block" href="{% url "social:begin" "google-oauth2" %}">ورود با حساب گوگل</a>
+			</div>
+		</div>
+	</div>
+	<div class="card-footer">
+		<ul>
+			<li><a href="{% url 'accounts:user_forget' %}">فراموشی رمز عبور</a></li>
+			<li><a href="{% url 'accounts:user_register' %}">ساخت حساب کاربری</a></li>
+			<li><a href="{% url 'accounts:resend_code' %}">ارسال مجدد لینک فعال‌سازی </a></li>
+		</ul>
+	</div>
+	</div>
+
+{% endblock %}

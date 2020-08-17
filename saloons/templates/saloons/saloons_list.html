@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load cache %}
+{% load static %}
+{% load thumbnail %}
+
+
+{% block title %}
+	خانه
+{% endblock %}
+
+{#{% cache 500 content %}#}
+{% block content %}
+	<div class="container-fluid"  id="result">
+	<div class="row">
+
+{#		Start Column#}
+			<div class="col-4 mt-1">
+			<div class="text-center mt-5 mx-auto">
+				<h4>فیلتر کردن</h4>
+			</div>
+				<div class="card mt-3">
+					<div class="card-body">
+						<div class="card">
+							<div class="card-header">
+								<h5>فیلتر براساس</h5>
+							</div>
+							<div class="card-body">
+								<form action="" method="get">
+									{% csrf_token %}
+									{{ type_form.type|as_crispy_field }}
+									{{ gender_form.gender|as_crispy_field }}
+									<input type="submit" class="btn btn-primary" value="اعمال فیلتر">
+									<a href="{% url 'saloons:saloons_list' %}" class="btn btn-danger">حذف فیلتر</a>
+								</form>
+								<hr>
+								<form action="" method="get">
+									{% csrf_token %}
+									{{ search_form|crispy }}
+								</form>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<div class="col-8 ">
+			<div class="text-center mt-5 mx-auto">
+			<h3>لیست سالن‌ها و چمن‌ها</h3>
+
+					{% for saloon in saloons_list %}
+						<div class="card mt-4">
+							<div class="card-header">
+								<div class="row">
+									<div class="col-md-10 mx-auto">
+										<h4 class="text-center">{{ saloon.name }}</h4>
+									</div>
+
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-4 mt-2">
+										ساعت کار {% if saloon.type == 'su' %}
+										چمن
+										{% else %}
+										سالن
+										{% endif %}  از
+										{{ saloon.start_time }}
+										تا
+										{{ saloon.end_time }}
+										می‌باشد.
+									</div>
+									<div class="col-md-4">
+										استان:
+										<a href="{% url 'saloons:saloons_province' saloon.province %}" class="btn btn-outline-primary">{{ saloon.province }}</a>
+									</div>
+									<div class="col-md-4">
+										شهر:
+										<a href="{% url 'saloons:saloons_city' saloon.city %}" class="btn btn-outline-danger">{{ saloon.city }}</a>
+									</div>
+								</div>
+								<hr>
+							<div class="row">
+								<div class="col-md-4">
+									<img class="img-thumbnail" src="{% thumbnail saloon.picture 250x200 crop %}" alt="{{ saloon.name }}" />
+								</div>
+								<div class="col-md-8">
+									<div>
+										{{ saloon.about|safe|truncatewords:100 }}
+									</div>
+								</div>
+							</div>
+							</div>
+							<div class="card-footer">
+								<a href="{{ saloon.get_absoulte_url }}" class="btn btn-block btn-success">انتخاب سالن و رزرو</a>
+							</div>
+						</div>
+					{% endfor %}
+
+			</div>
+
+
+		</div>
+	</div>
+	</div>
+
+{% endblock %}
+{#{% endcache %}#}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	بازیابی رمز عبور
+{% endblock %}
+{% block content %}
+	<div class="card mt-5">
+	<div class="card-header">
+		<h3>بازیابی رمز عبور</h3>
+	</div>
+	<div class="card-body">
+		<p class="alert alert-success">لینک بازیابی رمزعبور برای شما ارسال شد</p>
+	</div>
+	<div class="card-footer">
+		<ul>
+			<li><a href="{% url 'accounts:user_login' %}">ورود به حساب</a></li>
+			<li><a href="{% url 'accounts:user_forget' %}">فراموشی رمز عبور</a></li>
+			<li><a href="{% url 'accounts:user_register' %}">ساختن حساب کاربری</a></li>
+		</ul>
+	</div>
+	</div>
+{% endblock %}

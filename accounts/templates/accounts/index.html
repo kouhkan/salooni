@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+	{{ request.user }}
+{% endblock %}
+
+{% block content %}
+
+	<div class="row">
+		<div class="col-10 mt-5 mx-auto">
+		<h4 class="text-center">ویرایش پروفایل</h4>
+		<div class="mx-auto">
+			<form action="" method="post" >
+				{% csrf_token %}
+				<div class="row">
+					<div class="col-12 mx-auto">
+					{{ form.phone|as_crispy_field }}
+				</div>
+				</div>
+				<div class="row">
+					<div class="col-6 mx-auto">
+					{{ form.first_name|as_crispy_field }}
+				</div>
+					<div class="col-6 mx-auto">
+					{{ form.last_name|as_crispy_field }}
+				</div>
+				</div>
+				<div class="row">
+					<div class="col-4 mx-auto">
+					{{ form.avatar|as_crispy_field }}
+				</div>
+					<div class="col-4 mx-auto">
+					{{ form.province|as_crispy_field }}
+				</div>
+					<div class="col-4 mx-auto">
+					{{ form.city|as_crispy_field }}
+				</div>
+				</div>
+				<input type="submit" class="btn btn-success btn-block" value="ثبت ویرایش">
+			</form>
+		</div>
+			<hr>
+
+			<h4 class="text-center">تاریخچه رزروهای من</h4>
+			<table class=" table table-responsive-lg table-hover table-responsive">
+				<thead>
+					<tr>
+						<td>#</td>
+						<td>سالن</td>
+						<td>تاریخ</td>
+						<td>ساعت</td>
+						<td>وضعیت رزرو</td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for res in reserves %}
+					<tr>
+						<td>{{ forloop.counter }}</td>
+						<td>{{ res.saloon.name }}</td>
+						<td>{{ res.change_datetime }}</td>
+						<td>{{ res.hour }}</td>
+						<td>
+							{% if res.status == 't' %}
+							<span class="btn btn-warning">در انتظار</span>
+							{% else %}
+							<span class="btn btn-outline-primary">رزرو شده</span>
+							{% endif %}
+						</td>
+					</tr>
+					{% endfor %}
+
+				</tbody>
+			</table>
+			<hr>
+		<h4 class="text-center">تاریخچه‌ی پرداختی‌های من</h4>
+		<table class="table table-responsive-lg table-responsive table-hover">
+			<thead>
+			<tr>
+				<td>#</td>
+				<td>کد رزرو</td>
+				<td>کد پرداخت</td>
+				<td>هزینه پرداخت شده</td>
+				<td>تاریخ پرداخت</td>
+				<td>وضعیت پرداخت</td>
+			</tr>
+			</thead>
+			<tbody>
+			{% for payment in payments %}
+			<tr>
+				<td>{{ forloop.counter }}</td>
+			<td>{{ payment.id }}</td>
+			<td>{{ payment.authority }}</td>
+			<td>{{ payment.reserve.saloon.amount|add:1000 }} تومان</td>
+			<td>{{ payment.change_datetime }}</td>
+			<td>
+				{% if payment.paid == True %}
+				<span class="btn btn-outline-success">پرداخت شده</span>
+				{% else %}
+				<span class="btn btn-danger">پرداخت نشده</span>
+				{% endif %}
+			</td>
+			</tr>
+			{% endfor %}
+
+			</tbody>
+		</table>
+			</div>
+
+		</div>
+
+{% endblock %}
+

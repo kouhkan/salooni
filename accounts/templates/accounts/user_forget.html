@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+فراموشی رمز عبور
+{% endblock %}
+
+{% block content %}
+
+	<div class="card mt-5">
+	<div class="card-header">
+		<h3>فراموشی رمز عبور</h3>
+	</div>
+	<div class="card-body">
+		<div class="col-8 mx-auto">
+			<form action="" method="post">
+			{% csrf_token %}
+			{{ form.email|as_crispy_field }}
+			<input type="submit" class="btn btn-primary btn-block" value="فراموشی رمز عبور">
+		</form>
+		</div>
+	</div>
+	<div class="card-footer">
+		<ul>
+			<li><a href="{% url 'accounts:user_login' %}">ورود به حساب کاربری</a></li>
+			<li><a href="{% url 'accounts:resend_code' %}">ارسال مجدد لینک فعال‌سازی </a></li>
+		</ul>
+	</div>
+	</div>
+
+{% endblock %}
