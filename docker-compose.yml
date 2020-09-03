@@ -1,0 +1,81 @@
+version: "3"
+
+services:
+   redis:
+    restart: always
+    image: redis:latest
+    expose:
+      - "6379"
+
+   cache:
+     image: memcached
+     ports:
+       - "11211:11211"
+     entrypoint:
+      - memcached
+      - -m 64
+   data:
+     restart: always
+     image: alpine
+     volumes:
+	   - /var/lib/postgresql
+	   command: "true"
+  app:
+    build: .
+    container_name: django-gunicorn
+    restart: always
+    ports:
+      - "8090:8090"
+    command:
+      "gunicorn --workers=2 --bind=0.0.0.0:8090 A.wsgi:application"
+    volumes:
+      - .:/src
+      - ./static:/src/static # <-- bind the static volume
+      - media_volume:/src/salooni/media  # <-- bind the media volume
+
+    links:
+      - postgres:postgres
+      - redis:redis
+    env_file: env
+    networks:
+      - web_nw
+    depends_on:
+      - cache
+
+  postgres:
+    restart: always
+    image: postgres:latest
+    volumes_from:
+      - data
+    volumes:
+      - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./backups/postgresql:/backup
+    env_file:
+      - env
+    expose:
+      - "5432"
+  nginx:
+    image: nginx:1.17
+    container_name: ngx
+    ports:
+      - "90:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./static:/src/static  # <-- bind the static volume
+      - media_volume:/src/salooni/media  # <-- bind the media volume
+    depends_on:
+      - app
+
+    networks:
+      - web_nw
+
+    
+    
+networks:
+  web_nw:
+    driver: bridge
+
+volumes:
+        #static_volume:  # <-- declare the static volume
+  media_volume:  # <-- declare the media volume
+

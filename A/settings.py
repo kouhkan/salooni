@@ -29,9 +29,9 @@ LOGIN_REDIRECT_URL = reverse_lazy('accounts:user_index')
 SECRET_KEY = '5bnrt@4kqu12hh%o(r#kd#9ry++a6=lx*9oh^hg5rf$^cj@yds'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost']
 
 
 # Application definition
@@ -116,8 +116,8 @@ WSGI_APPLICATION = 'A.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'salooni',
     }
 }
 
@@ -166,9 +166,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static/')
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 
 MEDIA_URL = '/media/'
@@ -188,15 +186,15 @@ CELERY_RESULT_BACKEND = 'rpc://'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 MAILER_EMAIL_BACKEND = EMAIL_BACKEND
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = 'GMAIL-PASSWORD'
+EMAIL_HOST_PASSWORD = 'mfauhftqbchbklft'
 EMAIL_HOST_USER = 'amirkouhkan1@gmail.com'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 
 
 # GOOGLE Authentication
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'Google-Consumer-Key' # Google Consumer Key
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Google-Consumer-Secret' # Google Consumer Secret
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '863174168021-md01j7kfi12dups1ak3b53nqvoregfni.apps.googleusercontent.com' # Google Consumer Key
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'sB5LJAhB_eilykGGyRLCHdB1' # Google Consumer Secret
 
 
 # CKEDITOR config
@@ -239,7 +237,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
+        'LOCATION': 'cache:11211',
     }
 }
 CACHE_MIDDLEWARE_ALIAS = 'default'

@@ -36,7 +36,6 @@ def api_account_login_view(request):
 		serializer = LoginSerializer(data=request.data)
 		data = {}
 		if serializer.is_valid():
-			print('&'*100, 'is_valid')
 			check_auth = authenticate(request,
 			                          username=serializer.data.get('username'),
 			                          password=serializer.data.get('password'))

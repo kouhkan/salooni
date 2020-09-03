@@ -1,0 +1,5 @@
+DB_NAME=salooni
+DB_USER=postgres
+DB_PASS=postgres123
+DB_SERVICE=postgres
+DB_PORT=5432
